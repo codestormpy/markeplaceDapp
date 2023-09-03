@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import { useContractToCall } from "../hooks/useContractRead"
 import Product from './Product'
-
+import LoadingAlert from './alerts/LoadingAlert'
+import ErrorAlert from './alerts/ErrorAlert'
+import OnSuccessAlert from './alerts/OnSuccessAlert'
 
 const ProductLists = () => {
     const { data } = useContractToCall("getProductsLength", [], true)
@@ -30,6 +32,9 @@ const ProductLists = () => {
                 <Product 
                 key={i}
                 id={i}
+                setLoading={setLoading}
+                setError={setError}
+                clear={clear}
                 />);                
         }
         return products
@@ -38,9 +43,9 @@ const ProductLists = () => {
   return (
     <div>
       {/* If there is an alert, display it */}
-      {/* {error && <ErrorAlert message={error} clear={clear} />}
-      {success && <SuccessAlert message={success} />}
-      {loading && <LoadingAlert message={loading} />} */}
+      {error && <ErrorAlert message={error} clear={clear} />}
+      {success && <OnSuccessAlert message={success} />}
+      {loading && <LoadingAlert message={loading} />}
       {/* Display the products */}
       <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
         <h2 className="sr-only">Products</h2>

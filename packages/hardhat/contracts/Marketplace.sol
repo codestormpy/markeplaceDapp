@@ -17,7 +17,7 @@ interface IERC20Token {
 
 contract Marketplace {
     // string public product;
-    uint internal productsLength;
+    uint internal productsLength = 0;
     address internal cUsdTokenAddress = 0x874069Fa1Eb16D44d622F2e0Ca25eeA172369bC1;
 
     struct Product {
@@ -33,19 +33,19 @@ contract Marketplace {
         bool available;
     }
 
-    mapping (uint => Product) internal products;
+    mapping (uint256 => Product) internal products;
 
     function writeProduct( 
         string memory _name,
         string memory _image,
         string memory _description,
         string memory _location,
-        uint _price,
+        uint256 _price,
         uint256 _quantity
         ) public {
             uint _sold = 0;
-            require(_quantity > 0, "Quantity Must be greater than zero");
-        products[productsLength] = Product(
+            // require(_quantity > 0, "Quantity Must be greater than zero");
+        products[productsLength++] = Product(
             payable(msg.sender),
             // msg.sender returns the address of the entity that is making the call, it is also payable. This is what you are going to save as the owners’ address.
             _name,
@@ -57,7 +57,6 @@ contract Marketplace {
             _quantity,
             true
         );
-        productsLength++;
     }
 
     function readProduct(uint _index) public view returns(
@@ -85,9 +84,8 @@ contract Marketplace {
         );
 
     }
-
     // to buy a product
-    function buyproduct(uint _index) public payable {
+    function buyproduct(uint _index) public payable{
         require(products[_index].quantity > 0, "there is no product left");
         require(
             IERC20Token(cUsdTokenAddress).transferFrom(
@@ -97,6 +95,7 @@ contract Marketplace {
             ),
             "Transfer Failed"
         );
+
         products[_index].sold++;
         products[_index].quantity--;
         if (products[_index].quantity == 0) {

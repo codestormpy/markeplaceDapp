@@ -1,9 +1,6 @@
-export interface ErrorAlertProps {
-    message: string | undefined,
-    clear: () => any
-}
 
-const ErrorAlert = ({ message, clear }: ErrorAlertProps) => {
+
+const ErrorAlert = ({ message, clear }) => {
     return (
         <div
         className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import Link from "next/link"
+import { identicontemplates } from "../helpers/index"
 import {ethers } from "ethers"
 import { useConnectModal } from "@rainbow-me/rainbowkit"
 import { useAccount } from "wagmi";
@@ -23,7 +24,7 @@ const Product = ({ id, setError, setLoading, clear}) => {
     // we need the product useState to manage the state of the product
     const [product, setProduct] = useState(null)
     const {writeAsync: approve} = useContractToApprove(
-        product?.price?.toString() || "0"
+        product?.price?.toString() || "1"
     )
     // useConnectModal to trigger the wallet app for payment of tthe product 
     const { openConnectModal } = useConnectModal()
@@ -56,14 +57,13 @@ const Product = ({ id, setError, setLoading, clear}) => {
         }
         // approving the buyer of spending of the product prics for ERC20 cUSD contract
         const approveTx = await approve()
-        await approveTx;
-        setLoading("Purcharsing....")
-        toast.loading("Purchasing")
+        await approveTx.wait(1);
+        setLoading("Purchasing....")
 
         // once the spending is approved, paymentt will be made through wallet,
         const res = await buyproduct();
         // wait for the transaction to be mined
-        await res;
+        await res.wait();
     }
 
     const productPayment = async () => {
@@ -87,9 +87,8 @@ const Product = ({ id, setError, setLoading, clear}) => {
         } catch (e) {
             console.log({ e });
             setError(e?.reason || e?.message || "Something went wrong. Try again")
-            toast.warn(e?.reason || e?.message || "Something went wrong. Try again")
         } finally {
-            setLoading(null)
+           setLoading(null)
         }
     }
     if(!product) return null;
@@ -117,12 +116,12 @@ const Product = ({ id, setError, setLoading, clear}) => {
             className="w-full h-80 rounded-t-md  object-cover object-center group-hover:opacity-75"
           />
           {/* Show the address of the product owner as an identicon and link to the address on the Celo Explorer */}
-          {/* <Link
+          <Link
             href={`https://explorer.celo.org/alfajores/address/${product.owner}`}
             className={"absolute -mt-7 ml-6 h-16 w-16 rounded-full"}
           >
-            {identiconTemplate(product.owner)}
-          </Link> */}
+            {identicontemplates(product.owner)}
+          </Link>
         </div>
 
         <div className={"m-5"}>
@@ -149,13 +148,18 @@ const Product = ({ id, setError, setLoading, clear}) => {
             {
               product.owner == address ? (
                 <UpdateProduct id={id} />
-              ) : (
+              ) : ( product.available == true ?
                 <button
                 onClick={productPayment}
                 className="mt-4 h-14 w-full border-[1px] border-gray-500 text-black p-2 rounded-lg hover:bg-black hover:text-white"
               >
                 {/* Show the product price in cUSD */}
                 Buy for {formatPriceWei} cUSD
+              </button> : <button
+                className="mt-4 h-14 w-full border-[1px] border-gray-500 text-black p-2 rounded-lg hover:bg-black hover:text-white"
+              >
+                {/* Show the product price in cUSD */}
+                Not Available
               </button>
               )
             }
