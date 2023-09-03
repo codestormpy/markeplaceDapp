@@ -40,7 +40,7 @@ const UpdateProduct = ({ id }) => {
         throw "Failed to update the product"
     }
     setLoading("Updating the product......")
-    if(!isFormFilled) throw new Error("Plaese fill the updated form");
+    if(!isFormFilled) throw new Error("Please fill the updated form");
     // to make the update transaction
     const updateTx = await updateProduct();
     setLoading("Waiting for confirmation.....")

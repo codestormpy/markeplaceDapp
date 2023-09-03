@@ -8,7 +8,7 @@ import OnSuccessAlert from './alerts/OnSuccessAlert'
 const ProductLists = () => {
     const { data } = useContractToCall("getProductsLength", [], true)
 
-    const productlenght = data ? Number(data.toString()) : 0;
+    const productLength = data ? Number(data.toString()) : 0;
 
     // Error state
     const [error, setError] = useState("")
@@ -22,12 +22,12 @@ const ProductLists = () => {
         setLoading("");
       }
     // function to return all the products
-    const getAllproduct = () => {
+    const getAllProduct = () => {
         // if there is no product return null 
-        if(!productlenght) return null;
+        if(!productLength) return null;
         const products = [];
         // we loop through to display all the products
-        for(let i =0; i < productlenght; i++) {
+        for(let i =0; i < productLength; i++) {
             products.push(
                 <Product 
                 key={i}
