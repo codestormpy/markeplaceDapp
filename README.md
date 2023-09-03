@@ -1,4 +1,7 @@
 
+### Hosted Link 
+
+```https://markeplace-react-app.vercel.app/```
 
 ### Contracts
 To check the contrat check the hardhat folder
