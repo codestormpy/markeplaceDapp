@@ -58,20 +58,42 @@ const AddProducts = () => {
 
   // funtion that will save the product to the marketplace
   const handleCreateProduct = async () => {
-    if (!uploadProduct) {
-      throw "Failed to upload th product";
+    try {
+      // Check if required fields are filled
+      if (!iscomplete) {
+        throw new Error("Please fill in all the required inputs");
+      }
+  
+      // Check if price and quantity are positive numbers
+      if (isNaN(price) || price <= 0 || isNaN(quantity) || quantity <= 0) {
+        throw new Error("Price and quantity must be positive numbers");
+      }
+  
+      // Check if productImage is a valid URL
+      if (!isValidURL(productImage)) {
+        throw new Error("Product Image must be a valid URL");
+      }
+  
+      setLoading("Uploading.......");
+      const uploadTx = await uploadProduct();
+      setLoading("Waiting for confirmation....");
+      await uploadTx;
+  
+      setToggele(false);
+      clearFormInput();
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error(error.message);
     }
-    setLoading("Uploading.......");
-    if (!iscomplete) throw new Error("Please fill the required inputs");
-
-    // to make the upload transaction
-    const uploadTx = await uploadProduct();
-    setLoading("Waiting for confirmation....");
-    await uploadTx;
-
-    setToggele(false);
-    clearFormInput();
   };
+  
+  // Function to validate URL format
+  const isValidURL = (url) => {
+    const pattern = new RegExp(
+      /^(http|https):\/\/[^ "]+$/ // Adjust the regex pattern as needed
+    );
+    return pattern.test(url);
+  };  
 
   const addProduct = async (e) => {
     e.preventDefault();
