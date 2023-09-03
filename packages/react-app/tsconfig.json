@@ -25,6 +25,6 @@
       "@local-contracts/*": ["../hardhat/*"]
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "hooks/useContractWrite.js", "hooks/useContractRead.js", "hooks/useApprove.js", "components/alerts/LoadingAlert.js, "components/alerts/OnSuccessAlert.jsx"x", "components/alerts/ErrorAlert.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "hooks/useContractWrite.js", "hooks/useContractRead.js", "hooks/useApprove.js"],
   "exclude": ["node_modules"]
 }
